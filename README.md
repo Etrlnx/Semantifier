@@ -18,27 +18,27 @@
 
 
 ### 1. NLI-Driven Silver Labeling (Data Pipeline)
-[cite_start]Due to the scarcity of manually annotated consistency labels, the system employs an **Inference-as-Labeler** strategy[cite: 100, 101].
-* [cite_start]**Backbone**: Utilizes a DeBERTa-v3 architecture pre-trained on MultiNLI and SNLI datasets[cite: 102].
-* [cite_start]**Logic**: The "Premise" is mapped to the detailed product review text ($f_t$), and the "Hypothesis" is mapped to the product summary ($f_s$)[cite: 101].
-* **Heuristic**: To maintain a high precision threshold, only pairs where the model predicts `entailment` are labeled as **Consistent ($L=1$)**. [cite_start]Samples predicted as `neutral` or `contradiction` are treated as **Inconsistent ($L=0$)**[cite: 105, 110].
+Due to the scarcity of manually annotated consistency labels, the system employs an **Inference-as-Labeler** strategy.
+* **Backbone**: Utilizes a DeBERTa-v3 architecture pre-trained on MultiNLI and SNLI datasets[cite: 102].
+* **Logic**: The "Premise" is mapped to the detailed product review text ($f_t$), and the "Hypothesis" is mapped to the product summary ($f_s$).
+* **Heuristic**: To maintain a high precision threshold, only pairs where the model predicts `entailment` are labeled as **Consistent ($L=1$)**. Samples predicted as `neutral` or `contradiction` are treated as **Inconsistent ($L=0$)**.
 
 ### 2. Dual-Encoder Feature Extraction
-[cite_start]Unlike traditional single-encoders that concatenate inputs, Semantifier uses a **Dual-Encoder** approach to maintain distinct field properties[cite: 129].
-* [cite_start]**Backbone**: Utilizes a `RoBERTa-base` backbone to project the summary and text into a shared latent space[cite: 128].
-* [cite_start]**Operation**: This stage independently encodes fields into dense semantic embeddings, enabling scalable representation learning[cite: 11, 132].
+Unlike traditional single-encoders that concatenate inputs, Semantifier uses a **Dual-Encoder** approach to maintain distinct field properties.
+* **Backbone**: Utilizes a `RoBERTa-base` backbone to project the summary and text into a shared latent space.
+* **Operation**: This stage independently encodes fields into dense semantic embeddings, enabling scalable representation learning
 
 ### 3. Multi-Head Cross-Attention Interaction
-[cite_start]The core innovation is the **Asymmetrical Cross-Attention** layer that identifies fine-grained semantic contradictions[cite: 133].
-* [cite_start]**Query ($Q$)**: The summary hidden states serve as the Query ($Q = H_sW_Q$)[cite: 137].
-* [cite_start]**Key ($K$) & Value ($V$)**: The review text hidden states serve as the Key and Value ($K = H_tW_K, V = H_tW_V$)[cite: 137].
-* [cite_start]**Mechanism**: This ensures every token in the summary is cross-referenced against the entire context of the review text to identify "logical anchors"[cite: 138, 252].
+The core innovation is the **Asymmetrical Cross-Attention** layer that identifies fine-grained semantic contradictions.
+* **Query ($Q$)**: The summary hidden states serve as the Query ($Q = H_sW_Q$)[cite: 137].
+* **Key ($K$) & Value ($V$)**: The review text hidden states serve as the Key and Value ($K = H_tW_K, V = H_tW_V$).
+* **Mechanism**: This ensures every token in the summary is cross-referenced against the entire context of the review text to identify "logical anchors".
 
 ### 4. Output & Inference Head
-[cite_start]The attended features are aggregated and passed through a classification head for the final consistency score[cite: 157].
-* [cite_start]**Pooling**: Features are processed through a global average pooling layer[cite: 157].
-* [cite_start]**Regularization**: A dropout rate of 0.3 is applied to prevent overfitting on the synthetic silver labels[cite: 158].
-* [cite_start]**Optimization**: The model is optimized using Binary Cross-Entropy (BCE) loss[cite: 159, 161].
+The attended features are aggregated and passed through a classification head for the final consistency score.
+* **Pooling**: Features are processed through a global average pooling layer.
+* **Regularization**: A dropout rate of 0.3 is applied to prevent overfitting on the synthetic silver labels.
+* **Optimization**: The model is optimized using Binary Cross-Entropy (BCE) loss.
 
 ## Model Performance
 | Metric | Value |
@@ -48,4 +48,4 @@
 | **Consistent Samples** | 159 (True Positive) |
 | **Inconsistent Samples**| 137 (True Negative) |
 
-[cite_start]The model demonstrates strong discriminative power, successfully mitigating "Majority Class Gravity" through strategic downsampling and balanced training[cite: 177, 207].
+The model demonstrates strong discriminative power, successfully mitigating "Majority Class Gravity" through strategic downsampling and balanced training.
