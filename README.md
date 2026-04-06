@@ -6,13 +6,13 @@
 
 **Semantifier** is a hybrid deep learning framework designed to detect logical inconsistencies across heterogeneous e-commerce product fields (e.g., Summary vs. Review Text). [cite_start]By integrating a **Dual-Encoder** backbone with a **Multi-Head Cross-Attention** mechanism, the model moves beyond simple keyword matching to perform directional logical inference[cite: 10, 12, 45].
 
-## 🚀 Key Features
+## Key Features
 - [cite_start]**Dual-Encoder Architecture**: Independently encodes product metadata using `RoBERTa-base` to preserve the distinct structural properties of different fields[cite: 11, 128].
 - [cite_start]**Cross-Attention Interaction**: Implements an asymmetrical attention layer where the Summary acts as a Query against the Review Text context to identify fine-grained contradictions[cite: 12, 137].
 - [cite_start]**NLI-Driven Silver Labeling**: Overcomes the lack of annotated ground truth by using `DeBERTa-v3` to generate high-precision synthetic consistency labels[cite: 99, 102].
 - [cite_start]**High-Performance Pipeline**: Optimized for Dual-GPU environments (NVIDIA T4), achieving a 92% reduction in epoch training time (90m → 7m) via PyTorch DDP and Mixed Precision (AMP).
 
-## 🏗️ System Architecture
+## System Architecture
 [cite_start]The Semantifier architecture is a modular, high-throughput pipeline designed for semantic validation[cite: 10, 93].
 
 
@@ -40,7 +40,7 @@
 * [cite_start]**Regularization**: A dropout rate of 0.3 is applied to prevent overfitting on the synthetic silver labels[cite: 158].
 * [cite_start]**Optimization**: The model is optimized using Binary Cross-Entropy (BCE) loss[cite: 159, 161].
 
-## 📊 Model Performance
+## Model Performance
 | Metric | Value |
 | :--- | :--- |
 | **Accuracy** | ~82% |
@@ -49,7 +49,3 @@
 | **Inconsistent Samples**| 137 (True Negative) |
 
 [cite_start]The model demonstrates strong discriminative power, successfully mitigating "Majority Class Gravity" through strategic downsampling and balanced training[cite: 177, 207].
-
-## 📁 Repository Structure
-```text
-└── Semantifier.ipynb       # Main Kaggle notebook containing the full pipeline
