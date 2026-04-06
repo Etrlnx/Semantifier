@@ -4,22 +4,22 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/get-started/locally/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Semantifier** is a hybrid deep learning framework designed to detect logical inconsistencies across heterogeneous e-commerce product fields (e.g., Summary vs. Review Text). [cite_start]By integrating a **Dual-Encoder** backbone with a **Multi-Head Cross-Attention** mechanism, the model moves beyond simple keyword matching to perform directional logical inference[cite: 10, 12, 45].
+**Semantifier** is a hybrid deep learning framework designed to detect logical inconsistencies across heterogeneous e-commerce product fields (e.g., Summary vs. Review Text). By integrating a **Dual-Encoder** backbone with a **Multi-Head Cross-Attention** mechanism, the model moves beyond simple keyword matching to perform directional logical inference.
 
 ## Key Features
-- [cite_start]**Dual-Encoder Architecture**: Independently encodes product metadata using `RoBERTa-base` to preserve the distinct structural properties of different fields[cite: 11, 128].
-- [cite_start]**Cross-Attention Interaction**: Implements an asymmetrical attention layer where the Summary acts as a Query against the Review Text context to identify fine-grained contradictions[cite: 12, 137].
-- [cite_start]**NLI-Driven Silver Labeling**: Overcomes the lack of annotated ground truth by using `DeBERTa-v3` to generate high-precision synthetic consistency labels[cite: 99, 102].
-- [cite_start]**High-Performance Pipeline**: Optimized for Dual-GPU environments (NVIDIA T4), achieving a 92% reduction in epoch training time (90m → 7m) via PyTorch DDP and Mixed Precision (AMP).
+- **Dual-Encoder Architecture**: Independently encodes product metadata using `RoBERTa-base` to preserve the distinct structural properties of different fields.
+- **Cross-Attention Interaction**: Implements an asymmetrical attention layer where the Summary acts as a Query against the Review Text context to identify fine-grained contradictions.
+- **NLI-Driven Silver Labeling**: Overcomes the lack of annotated ground truth by using `DeBERTa-v3` to generate high-precision synthetic consistency labels.
+- **High-Performance Pipeline**: Optimized for Dual-GPU environments (NVIDIA T4), achieving a 92% reduction in epoch training time (90m → 7m) via PyTorch DDP and Mixed Precision (AMP).
 
 ## System Architecture
-[cite_start]The Semantifier architecture is a modular, high-throughput pipeline designed for semantic validation[cite: 10, 93].
+The Semantifier architecture is a modular, high-throughput pipeline designed for semantic validation.
 
 
 
 ### 1. NLI-Driven Silver Labeling (Data Pipeline)
 Due to the scarcity of manually annotated consistency labels, the system employs an **Inference-as-Labeler** strategy.
-* **Backbone**: Utilizes a DeBERTa-v3 architecture pre-trained on MultiNLI and SNLI datasets[cite: 102].
+* **Backbone**: Utilizes a DeBERTa-v3 architecture pre-trained on MultiNLI and SNLI datasets.
 * **Logic**: The "Premise" is mapped to the detailed product review text ($f_t$), and the "Hypothesis" is mapped to the product summary ($f_s$).
 * **Heuristic**: To maintain a high precision threshold, only pairs where the model predicts `entailment` are labeled as **Consistent ($L=1$)**. Samples predicted as `neutral` or `contradiction` are treated as **Inconsistent ($L=0$)**.
 
@@ -30,7 +30,7 @@ Unlike traditional single-encoders that concatenate inputs, Semantifier uses a *
 
 ### 3. Multi-Head Cross-Attention Interaction
 The core innovation is the **Asymmetrical Cross-Attention** layer that identifies fine-grained semantic contradictions.
-* **Query ($Q$)**: The summary hidden states serve as the Query ($Q = H_sW_Q$)[cite: 137].
+* **Query ($Q$)**: The summary hidden states serve as the Query ($Q = H_sW_Q$).
 * **Key ($K$) & Value ($V$)**: The review text hidden states serve as the Key and Value ($K = H_tW_K, V = H_tW_V$).
 * **Mechanism**: This ensures every token in the summary is cross-referenced against the entire context of the review text to identify "logical anchors".
 
